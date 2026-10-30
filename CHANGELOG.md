@@ -1,5 +1,64 @@
 # Changelog
 
+## 3.5.1 - 2026-10-30
+
+### English
+
+#### Added
+
+- PPTX text now inherits position, font size, bullets, numbering, indents,
+  paragraph spacing, line spacing, and colors from layout and master
+  placeholders, master text styles, and the presentation default text style.
+- Added PPTX color-map overrides, `showMasterSp`, theme fonts, gradient and
+  pattern fills, color transparency and luminance modifiers, outer shadows,
+  dashed lines, arrowheads, custom geometry, and additional preset shapes.
+- PPTX `normAutofit` font scaling and line-spacing reduction, slide-number
+  fields, capitals, superscript and subscript, strikethrough, highlight,
+  character spacing, vertical text, picture cropping, image backgrounds, and
+  table cell borders, margins, anchors, and merged cells are rendered.
+- PPTX packages with embedded OLE objects now open; the stored preview image
+  is shown, and the embedded object data is never read or run.
+- EMF and WMF images that wrap a single bitmap are displayed locally.
+
+#### Fixed
+
+- PPTX font sizes on 16:9 slides were rendered about one third too large.
+- Zero-height and zero-width PPTX lines are no longer dropped, and stroke
+  widths no longer stretch with the shape size.
+- PPTX text that overflows its shape is no longer clipped.
+- Missing numeric XML attributes now use their documented defaults instead of
+  zero.
+
+#### Changed
+
+- The production `dist/main.js` budget is raised from 500 KiB to 600 KiB.
+
+### 中文
+
+#### 新增
+
+- PPTX 文本从版式和母版占位符、母版文本样式及演示文稿默认文本样式继承位置、
+  字号、项目符号、编号、缩进、段落间距、行距和颜色。
+- 支持 PPTX 颜色映射覆盖、`showMasterSp`、主题字体、渐变和图案填充、颜色
+  透明度与亮度修饰、外阴影、虚线、箭头、自定义形状和更多预设形状。
+- 渲染 PPTX `normAutofit` 字号缩放与行距缩减、页码字段、全大写、上下标、
+  删除线、突出显示、字符间距、竖排文字、图片裁剪、图片背景，以及表格单元格
+  边框、内边距、垂直对齐和合并单元格。
+- 包含嵌入 OLE 对象的 PPTX 现在可以打开：显示文件中保存的预览图，嵌入的
+  对象数据不会被读取或运行。
+- 本地显示只包含一张位图的 EMF 和 WMF 图片。
+
+#### 修复
+
+- 16:9 幻灯片中的 PPTX 字号约大三分之一的问题。
+- 高度或宽度为 0 的 PPTX 线条不再被丢弃，线宽也不再随形状尺寸拉伸。
+- 超出形状范围的 PPTX 文本不再被裁切。
+- 缺失的数值型 XML 属性改为使用规定的默认值，而不是 0。
+
+#### 变更
+
+- 生产构建 `dist/main.js` 的体积预算从 500 KiB 调整为 600 KiB。
+
 ## 3.5.0 - 2026-08-09
 
 ### English

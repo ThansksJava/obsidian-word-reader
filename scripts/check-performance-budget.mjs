@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const bundlePath = path.join(rootDir, "dist", "main.js");
-const maximumBundleBytes = 500 * 1024;
+const maximumBundleBytes = 600 * 1024;
 const failures = [];
 
 if (!fs.existsSync(bundlePath)) {

@@ -183,7 +183,7 @@ function collectArtifactSizes() {
   );
   return {
     bundleBytes: fs.statSync(bundlePath).size,
-    bundleLimitBytes: 500 * 1024,
+    bundleLimitBytes: 600 * 1024,
     releaseZipBytes: releasePayloadBytes + zipHeaderBytes,
     releaseZipLimitBytes: 8 * 1024 * 1024,
     releaseZipMeasurement: "exact-size-for-current-stored-zip-packager",

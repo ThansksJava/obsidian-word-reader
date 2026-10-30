@@ -3,6 +3,7 @@ import type JSZip from "jszip";
 import {
   attribute,
   descendantsNamed,
+  firstChildNamed,
   namespacedAttribute,
   numberAttribute,
   parseXml,
@@ -103,6 +104,7 @@ export class PptxPackage {
   readonly slideHeight: number;
   readonly slidePaths: string[];
   readonly zipSummary: ZipSafetySummary;
+  readonly defaultTextStyle: Element | null;
 
   private readonly xmlCache =
     new LruCache<string, Promise<Document>>(XML_CACHE_CAPACITY);
@@ -138,6 +140,10 @@ export class PptxPackage {
       slideSize,
       "cy",
       DEFAULT_SLIDE_HEIGHT,
+    );
+    this.defaultTextStyle = firstChildNamed(
+      presentation.documentElement,
+      "defaultTextStyle",
     );
     this.slidePaths = descendantsNamed(
       presentation.documentElement,
@@ -189,7 +195,9 @@ export class PptxPackage {
       );
     }
     try {
-      await enforceOoxmlPackagePolicy(zip, "pptx");
+      await enforceOoxmlPackagePolicy(zip, "pptx", {
+        allowEmbeddedObjects: true,
+      });
     } catch (error) {
       if (error instanceof OoxmlPolicyError) {
         throw new PptxPackageError("unsupported", error.message);

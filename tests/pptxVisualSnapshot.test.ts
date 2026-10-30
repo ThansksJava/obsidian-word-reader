@@ -89,7 +89,7 @@ void test("common PPTX layouts match the structural visual baseline", async () =
   assert.ok(labels.includes("SmartArt"));
   assert.equal(
     hash,
-    "8286776424492aa0c05a6ef601e2974361b3e7adcfdb65de84caf57a448fd374",
+    "d53bce1fe821a241477ce7d5056cac7cdcb4910f05e56a173acd84583ee21b9a",
   );
 
   for (const resource of rendered.resources) {

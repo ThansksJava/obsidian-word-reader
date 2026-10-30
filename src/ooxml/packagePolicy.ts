@@ -34,10 +34,18 @@ const SCRIPT_MEDIA_EXTENSIONS = new Set([
   "wsf",
 ]);
 
+export interface OoxmlPackagePolicyOptions {
+  // Embedded OLE parts may remain in the package only when the caller never
+  // reads them and renders the stored preview image instead.
+  allowEmbeddedObjects?: boolean;
+}
+
 export async function enforceOoxmlPackagePolicy(
   zip: JSZip,
   format: OoxmlFormat,
+  options: OoxmlPackagePolicyOptions = {},
 ): Promise<void> {
+  const allowEmbeddedObjects = options.allowEmbeddedObjects === true;
   const names = Object.keys(zip.files);
   for (const name of names) {
     const lowerName = name.toLowerCase();
@@ -53,8 +61,9 @@ export async function enforceOoxmlPackagePolicy(
       );
     }
     if (
-      lowerName.includes("/embeddings/") ||
-      lowerName.includes("/oleobjects/")
+      !allowEmbeddedObjects &&
+      (lowerName.includes("/embeddings/") ||
+        lowerName.includes("/oleobjects/"))
     ) {
       throw new OoxmlPolicyError(
         "ole-object",
@@ -90,8 +99,9 @@ export async function enforceOoxmlPackagePolicy(
     );
   }
   if (
-    contentTypes.includes("oleobject") ||
-    contentTypes.includes("ole-object")
+    !allowEmbeddedObjects &&
+    (contentTypes.includes("oleobject") ||
+      contentTypes.includes("ole-object"))
   ) {
     throw new OoxmlPolicyError(
       "ole-object",

@@ -72,7 +72,7 @@ PPTX MVP 与 `2.0.1` 修复合并在 `2.0.1` 发布提交中。后续发布不�
 - 增加 Obsidian Desktop 手动基线，记录插件激活、首屏、长任务、实际 DOM 和
   文件关闭后的资源数量，用来校准 Node.js 微基准。
 - 性能诊断不得包含正文、备注、单元格值、内部 XML 或 vault 绝对路径。
-- 继续保持 `dist/main.js <= 500 KiB` 和 release zip `<= 8 MiB`。
+- 继续保持 `dist/main.js <= 600 KiB` 和 release zip `<= 8 MiB`。
 
 ## `3.4.0` 已完成验收
 

@@ -238,7 +238,7 @@ Office Reader 是一个 Obsidian 桌面端插件，用于在 Obsidian 内直接�
 - DOCX 每次渲染只建立一次可复用文本索引，并使用 CSS Highlight，不再改写
   文档 DOM；阅读状态按动画帧合并，未变化状态不会重复写入。
 - 适配宽度只切换 CSS 状态，不会重新渲染文档。
-- 生产构建强制执行 `dist/main.js` 不超过 500 KiB 的体积预算。
+- 生产构建强制执行 `dist/main.js` 不超过 600 KiB 的体积预算。
 - 阅读状态使用最多保留 100 个文件的 LRU 存储；每条记录只包含路径、修改时间、
   格式、位置、缩放和导航状态。源文件修改后会清除过期的位置与导航状态，同时
   保留用户的缩放与适配偏好。
@@ -379,7 +379,7 @@ git tag 2.5.0
 git push origin 2.5.0
 ```
 
-workflow 会校验 tag 是否与 `package.json`、`manifest.json` 和 `package-lock.json` 一致，检查 500 KiB bundle 预算，然后构建插件、生成 `release/obsidian-word-reader-2.5.0.zip`、提取对应版本的 `CHANGELOG.md` 内容，并把 `main.js`、`manifest.json`、`styles.css` 和 zip 一起上传到 GitHub Release。
+workflow 会校验 tag 是否与 `package.json`、`manifest.json` 和 `package-lock.json` 一致，检查 600 KiB bundle 预算，然后构建插件、生成 `release/obsidian-word-reader-2.5.0.zip`、提取对应版本的 `CHANGELOG.md` 内容，并把 `main.js`、`manifest.json`、`styles.css` 和 zip 一起上传到 GitHub Release。
 
 ## 开发
 
@@ -444,6 +444,9 @@ CI 和发布工作流使用 Node.js 20.19.0。
 - 不支持 PPTX 动画、切换效果、音视频播放、宏、编辑、图表、SmartArt、
   SVG/GIF/WebP 媒体，也不保证与 PowerPoint 像素级一致。
 - 图表和 SmartArt 会显示本地占位并写入诊断，不会还原其原生 PowerPoint 外观。
+- 嵌入的 OLE 对象显示演示文稿中保存的 PNG、JPEG 或 BMP 预览图；没有这类预览图时
+  显示本地占位。
+- 只包含一张位图的 EMF 和 WMF 图片可以显示；矢量图元文件显示本地占位。
 - 演示文稿缩略图会在本地按需生成；超大或图片较多的幻灯片进入可视区域时仍可能
   需要更长渲染时间。
 - Word 预览会跟随当前 Obsidian 主题，但文档内部显式设置的颜色仍可能影响渲染结果。
@@ -462,6 +465,7 @@ CI 和发布工作流使用 Node.js 20.19.0。
   Obsidian 的二进制 vault API 进行渲染和文本提取。
 - **无动态脚本注入**：插件仅创建结构性 DOM 元素（`div`、`span`、`button`、`input`）用于文档渲染。任何时候都不会创建或注入 `<script>` 元素。
 - **安全 PPTX 压缩包**：解压前校验 ZIP 元数据，外部包关系会被忽略而不会加载。
+  嵌入的 OLE 对象数据不会被读取或运行，只显示其保存的预览图。
 - **安全 XLSX 公式**：只显示公式文本和缓存结果，不运行宏、外部公式代码或重算。
 - **安全 XLSX 丰富内容**：图片仅限包内安全光栅格式，图表预览只读取缓存序列；
   外部绘图、图表和工作簿关系绝不解析。经过评估的

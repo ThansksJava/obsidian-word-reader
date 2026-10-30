@@ -11,7 +11,7 @@ Community directory and before publishing later releases.
 - [ ] Confirm `npm run zip-reader:check` validates the production inflate-only
   async and streamed OOXML read path.
 - [ ] Confirm `npm run performance:check` passes DOCX, PPTX, and XLSX budgets,
-  reports `dist/main.js` at or below 500 KiB and the release zip at or below
+  reports `dist/main.js` at or below 600 KiB and the release zip at or below
   8 MiB, and writes the machine-readable CI trend artifacts.
 - [ ] Confirm `npm run large-files:extended` passes 500-page DOCX, 2,000-slide
   PPTX, Excel-row-limit sparse XLSX, and 50,000-row/400,000-cell dense XLSX

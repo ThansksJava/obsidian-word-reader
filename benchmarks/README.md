@@ -21,7 +21,7 @@ The shared metrics are:
 
 XLSX additionally keeps the existing 3.2.0 dense-streaming gates: `3,000 ms`
 parse, `192 MiB` heap growth, and a `256 KiB` worksheet-data buffer. Production
-artifacts remain limited to a `500 KiB` `dist/main.js` and an `8 MiB` release
+artifacts remain limited to a `600 KiB` `dist/main.js` and an `8 MiB` release
 zip.
 
 Generated files are written to `benchmark-results/`:

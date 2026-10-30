@@ -7,7 +7,7 @@ import {
   relationshipPartPath,
   resolvePackagePath,
 } from "../src/pptx/pptxPackage";
-import { createMinimalPptx } from "./pptxFixture";
+import { createMinimalPptx, createOleObjectPptx } from "./pptxFixture";
 import { createLargePptx } from "./performanceFixtures";
 
 void test("PptxPackage resolves slide, layout, master, theme, and media", async () => {
@@ -79,4 +79,11 @@ void test("PptxPackage rejects macro-enabled packages", async () => {
     () => PptxPackage.load(buffer),
     /Macro-enabled PowerPoint packages are not supported/,
   );
+});
+
+void test("PptxPackage opens packages with embedded OLE objects", async () => {
+  const pptx = await PptxPackage.load(
+    await createOleObjectPptx({ previewImage: true }),
+  );
+  assert.equal(pptx.slideCount, 1);
 });

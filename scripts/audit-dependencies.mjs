@@ -9,7 +9,7 @@ const pkg = readJson("package.json");
 const lockfile = readJson("package-lock.json");
 const manifest = readJson("manifest.json");
 const licenseInventoryPath = path.join(rootDir, "THIRD_PARTY_LICENSES.md");
-const maximumBundleBytes = 500 * 1024;
+const maximumBundleBytes = 600 * 1024;
 const maximumReleaseBytes = 8 * 1024 * 1024;
 const releaseMajor = Number.parseInt(pkg.version.split(".")[0] ?? "", 10);
 const allowedLicenses = new Set([
@@ -314,5 +314,5 @@ if (failures.length > 0) {
 
 console.log(
   `Dependency audit passed: ${runtimePackages.length} locked runtime packages, ` +
-    `${bundledNames.size} bundled packages, 500 KiB/8 MiB size gates.`,
+    `${bundledNames.size} bundled packages, 600 KiB/8 MiB size gates.`,
 );

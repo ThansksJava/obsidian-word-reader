@@ -7,7 +7,7 @@ import {
   PptxRenderCancelledError,
   renderPptxSlide,
 } from "../src/pptx/pptxRenderer";
-import { createMinimalPptx } from "./pptxFixture";
+import { createMinimalPptx, createOleObjectPptx } from "./pptxFixture";
 
 class MockClassList {
   readonly values = new Set<string>();
@@ -79,7 +79,7 @@ void test("renderPptxSlide renders theme shapes, text, image, and table", async 
   assert.ok(
     all.some(
       (element) =>
-        element.tagName === "rect" &&
+        element.tagName === "path" &&
         element.attributes.get("fill") === "#cc5500",
     ),
   );
@@ -202,6 +202,52 @@ void test("PptxPackage rejects embedded SVG resources", async () => {
       ),
     /Script-capable media is not supported/,
   );
+});
+
+void test("renderPptxSlide shows the stored preview of embedded OLE objects", async () => {
+  const pptx = await PptxPackage.load(
+    await createOleObjectPptx({ previewImage: true }),
+  );
+  const rendered = await renderPptxSlide(
+    pptx,
+    await pptx.getSlideContext(0),
+    new MockDocument() as unknown as Document,
+  );
+  const images = flatten(rendered.element as unknown as MockElement).filter(
+    (element) => element.tagName === "img",
+  );
+
+  assert.equal(images.length, 2);
+  assert.ok(images.some((element) => element.alt === "Embedded preview"));
+  assert.equal(rendered.diagnostics.imageCount, 2);
+  assert.equal(rendered.diagnostics.unsupportedObjectCount, 0);
+  for (const resource of rendered.resources) {
+    URL.revokeObjectURL(resource);
+  }
+});
+
+void test("renderPptxSlide uses a placeholder for OLE objects without a preview", async () => {
+  const pptx = await PptxPackage.load(
+    await createOleObjectPptx({ previewImage: false }),
+  );
+  const rendered = await renderPptxSlide(
+    pptx,
+    await pptx.getSlideContext(0),
+    new MockDocument() as unknown as Document,
+  );
+  const all = flatten(rendered.element as unknown as MockElement);
+
+  assert.ok(
+    all.some(
+      (element) =>
+        element.className === "pptx-reader-unsupported-object" &&
+        element.textContent === "Embedded object",
+    ),
+  );
+  assert.equal(rendered.diagnostics.unsupportedObjectCount, 1);
+  for (const resource of rendered.resources) {
+    URL.revokeObjectURL(resource);
+  }
 });
 
 function flatten(root: MockElement): MockElement[] {

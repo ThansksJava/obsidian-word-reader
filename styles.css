@@ -783,18 +783,24 @@
   user-select: text;
 }
 
+/* PowerPoint lets text and strokes extend past their shape bounds. */
 .pptx-reader-element {
   position: absolute;
   box-sizing: border-box;
-  overflow: hidden;
+  overflow: visible;
   transform-origin: center center;
+}
+
+.pptx-reader-background {
+  position: absolute;
+  inset: 0;
 }
 
 .pptx-reader-shape-svg {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  top: 0;
+  left: 0;
+  overflow: visible;
 }
 
 .pptx-reader-text {
@@ -803,10 +809,23 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  overflow: hidden;
-  line-height: 1.15;
+  overflow: visible;
+  line-height: 1.2;
   white-space: pre-wrap;
   overflow-wrap: break-word;
+}
+
+.pptx-reader-text.is-unwrapped {
+  white-space: pre;
+}
+
+.pptx-reader-text.is-vertical,
+.pptx-reader-text.is-vertical-270 {
+  writing-mode: vertical-rl;
+}
+
+.pptx-reader-text.is-vertical-270 {
+  transform: rotate(180deg);
 }
 
 .pptx-reader-paragraph {
@@ -815,7 +834,22 @@
 
 .pptx-reader-bullet {
   display: inline-block;
-  min-width: 1.2em;
+  padding-right: 0.25em;
+}
+
+.pptx-reader-bullet.is-hanging {
+  padding-right: 0;
+  text-indent: 0;
+}
+
+.pptx-reader-text .is-all-caps,
+.pptx-reader-table .is-all-caps {
+  text-transform: uppercase;
+}
+
+.pptx-reader-text .is-small-caps,
+.pptx-reader-table .is-small-caps {
+  font-variant: small-caps;
 }
 
 .pptx-reader-text .is-bold,
@@ -833,6 +867,16 @@
   text-decoration: underline;
 }
 
+.pptx-reader-text .is-strikethrough,
+.pptx-reader-table .is-strikethrough {
+  text-decoration: line-through;
+}
+
+.pptx-reader-text .is-underlined.is-strikethrough,
+.pptx-reader-table .is-underlined.is-strikethrough {
+  text-decoration: underline line-through;
+}
+
 .pptx-reader-image {
   display: block;
   width: 100%;
@@ -840,12 +884,21 @@
   object-fit: fill;
 }
 
+.pptx-reader-element.is-cropped {
+  overflow: hidden;
+}
+
+.pptx-reader-image.is-cropped {
+  position: absolute;
+  max-width: none;
+}
+
 .pptx-reader-table {
   width: 100%;
   height: 100%;
   table-layout: fixed;
   border-collapse: collapse;
-  color: #000;
+  color: inherit;
   background: transparent;
   font-size: 14px;
 }
@@ -854,6 +907,7 @@
   box-sizing: border-box;
   padding: 4px 6px;
   overflow: hidden;
+  overflow-wrap: anywhere;
   border: 1px solid #808080;
   vertical-align: middle;
 }

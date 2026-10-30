@@ -127,7 +127,11 @@ export function numberAttribute(
   name: string,
   fallback = 0,
 ): number {
-  const value = Number(attribute(element, name));
+  const raw = attribute(element, name);
+  if (raw === null || raw.trim() === "") {
+    return fallback;
+  }
+  const value = Number(raw);
   return Number.isFinite(value) ? value : fallback;
 }
 

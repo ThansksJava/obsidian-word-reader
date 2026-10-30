@@ -285,7 +285,7 @@ Available settings:
   without rewriting the document DOM. Reading-state writes are coalesced and
   unchanged states are skipped.
 - Fit-width mode is a CSS state change and does not rerender the document.
-- Production builds enforce a compressed `dist/main.js` budget of 500 KiB.
+- Production builds enforce a compressed `dist/main.js` budget of 600 KiB.
 - Reading state uses a bounded 100-file LRU store. Persisted entries contain
   only path, modification time, format, position, zoom, and navigation state.
   When a source file changes, stale position/navigation data is cleared while
@@ -430,7 +430,7 @@ git tag 2.5.0
 git push origin 2.5.0
 ```
 
-The workflow validates that the tag matches `package.json`, `manifest.json`, and `package-lock.json`, checks the 500 KiB bundle budget, builds the plugin, creates `release/obsidian-word-reader-2.5.0.zip`, extracts the matching `CHANGELOG.md` section, and uploads `main.js`, `manifest.json`, `styles.css`, and the zip to the GitHub Release.
+The workflow validates that the tag matches `package.json`, `manifest.json`, and `package-lock.json`, checks the 600 KiB bundle budget, builds the plugin, creates `release/obsidian-word-reader-2.5.0.zip`, extracts the matching `CHANGELOG.md` section, and uploads `main.js`, `manifest.json`, `styles.css`, and the zip to the GitHub Release.
 
 ## Development
 
@@ -498,6 +498,10 @@ CI and release workflows use Node.js 20.19.0.
   supported.
 - Charts and SmartArt are identified with local placeholders and diagnostics;
   their native PowerPoint appearance is not rendered.
+- Embedded OLE objects show the PNG, JPEG, or BMP preview image stored in the
+  presentation, or a local placeholder when no such preview exists.
+- EMF and WMF images that wrap a single bitmap are displayed; vector
+  metafiles show a local placeholder.
 - Presentation thumbnails are generated locally on demand. Very large or
   image-heavy slides can still take longer when they enter the visible range.
 - Word previews follow the current Obsidian theme, but explicit colors stored in the Word document may still influence the rendered result.
@@ -519,6 +523,8 @@ This plugin is designed with security as a top priority:
 - **No dynamic script injection**: The plugin creates only structural DOM elements (`div`, `span`, `button`, `input`) for document rendering. No `<script>` elements are created or injected at any point.
 - **Safe PPTX archives**: ZIP metadata is validated before decompression, and
   external package relationships are ignored instead of being loaded.
+  Embedded OLE object data is never read or run; only its stored preview image
+  is displayed.
 - **Safe XLSX formulas**: Formula text and cached results are displayed without
   running macros, external formula code, or recalculation.
 - **Safe XLSX rich content**: Images are restricted to package-local safe
